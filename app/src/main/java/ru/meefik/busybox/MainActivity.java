@@ -1,15 +1,12 @@
 package ru.meefik.busybox;
 
 import android.Manifest;
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
 import android.view.Menu;
@@ -20,7 +17,9 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+import androidx.annotation.NonNull;
+
+public class MainActivity extends Activity {
 
     static TextView output;
     static ScrollView scroll;
@@ -163,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
         new AlertDialog.Builder(this)
                 .setTitle(R.string.title_export_dialog)
                 .setCancelable(false)
-                .setView(input, 16, 32, 16, 0)
+                .setView(input)
                 .setPositiveButton(android.R.string.yes,
                         new DialogInterface.OnClickListener() {
                             @Override
@@ -197,11 +196,9 @@ public class MainActivity extends AppCompatActivity {
      * Request permission to write to storage.
      */
     private void requestWritePermissions() {
-        boolean hasPermission = (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
+        boolean hasPermission = (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
         if (!hasPermission) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_STORAGE);
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_STORAGE);
         } else {
             makeZipArchiveDialog();
         }
